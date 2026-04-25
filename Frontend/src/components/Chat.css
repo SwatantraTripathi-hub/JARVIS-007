@@ -112,6 +112,29 @@
   color: var(--text-primary);
 }
 
+.header-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.install-btn {
+  color: var(--accent-color);
+}
+
+.install-btn:hover {
+  color: var(--text-primary);
+  background-color: rgba(25, 195, 125, 0.15);
+}
+
+.delete-chat-btn {
+  color: #f87171;
+}
+
+.delete-chat-btn:hover {
+  color: #fecaca;
+  background-color: rgba(239, 68, 68, 0.15);
+}
+
 /* Messages Container */
 .chat-messages-container {
   flex: 1;
@@ -145,6 +168,12 @@
 .welcome-icon {
   margin-bottom: 24px;
   animation: bounceIn 0.6s ease;
+}
+
+.welcome-logo {
+  width: 80px;
+  height: 80px;
+  display: block;
 }
 
 @keyframes bounceIn {

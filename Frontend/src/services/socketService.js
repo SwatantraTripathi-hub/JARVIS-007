@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 
 // Connect to your backend server
-const SOCKET_URL = 'http://localhost:3000';
+const SOCKET_URL = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:3000' : window.location.origin);
 
 /** @param {unknown} value */
 const toText = (value) => {

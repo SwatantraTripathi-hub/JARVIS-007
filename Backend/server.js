@@ -102,6 +102,8 @@ io.on('connection', (socket) => {
       chat_history.pop();
       if (errorMessage === 'API_QUOTA_EXCEEDED') {
         socket.emit('ai-response', '⚠️ Gemini API daily free quota exhausted. Please wait a few minutes or check your billing at https://ai.google.dev/gemini-api/docs/rate-limits');
+      } else if (errorMessage === 'EMPTY_MODEL_RESPONSE') {
+        socket.emit('ai-response', 'I could not generate a complete answer this time. Please try again with a more specific prompt.');
       } else {
         socket.emit('ai-response', 'Sorry, something went wrong. Please try again.');
       }

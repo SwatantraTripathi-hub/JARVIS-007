@@ -3,6 +3,7 @@ import './Chat.css'
 import sendBtn from '../assets/send.svg'
 import userIcon from '../assets/user.svg'
 import botIcon from '../assets/bot.svg'
+import logo from '../assets/logo.svg'
 import TypingIndicator from './TypingIndicator'
 import socketService from '../services/socketService'
 import chatHistoryService from '../services/chatHistoryService'
@@ -49,11 +50,14 @@ const Chat = ({
   onToggleSidebar,
   currentChatId,
   onChatUpdate,
+  onDeleteCurrentChat,
 }) => {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
+  const [installPromptEvent, setInstallPromptEvent] = useState(null)
+  const [isInstalled, setIsInstalled] = useState(false)
   const messagesEndRef = useRef(null)
   const textareaRef = useRef(null)
 
@@ -111,6 +115,31 @@ const Chat = ({
     adjustTextareaHeight()
   }, [input])
 
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (event) => {
+      event.preventDefault()
+      setInstallPromptEvent(event)
+    }
+
+    const handleInstalled = () => {
+      setIsInstalled(true)
+      setInstallPromptEvent(null)
+    }
+
+    setIsInstalled(window.matchMedia('(display-mode: standalone)').matches)
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    window.addEventListener('appinstalled', handleInstalled)
+
+    return () => {
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt,
+      )
+      window.removeEventListener('appinstalled', handleInstalled)
+    }
+  }, [])
+
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current
     if (textarea) {
@@ -134,8 +163,11 @@ const Chat = ({
 
       // Send message to backend via Socket.IO
       socketService.sendMessage(messageText, (response) => {
+        const responseText = normalizeText(response).trim()
         const botMessage = {
-          text: normalizeText(response),
+          text:
+            responseText ||
+            'I could not understand that response. Please try again.',
           sender: 'bot',
           timestamp: new Date(),
         }
@@ -156,6 +188,21 @@ const Chat = ({
         timestamp: new Date(),
       }
       setMessages((prev) => [...prev, errorMessage])
+    }
+  }
+
+  const handleInstallApp = async () => {
+    if (!installPromptEvent) return
+
+    installPromptEvent.prompt()
+    await installPromptEvent.userChoice
+    setInstallPromptEvent(null)
+  }
+
+  const handleDeleteChat = () => {
+    if (!currentChatId) return
+    if (window.confirm('Delete current chat?')) {
+      onDeleteCurrentChat?.()
     }
   }
 
@@ -197,7 +244,7 @@ const Chat = ({
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
-        <h1 className="chat-title">ChatGPT</h1>
+        <h1 className="chat-title">JARVIS</h1>
         <div className="connection-status">
           <div
             className={`status-indicator ${isConnected ? 'connected' : 'disconnected'}`}
@@ -207,6 +254,44 @@ const Chat = ({
           </span>
         </div>
         <div className="header-actions">
+          {!isInstalled && installPromptEvent && (
+            <button
+              className="header-btn install-btn"
+              title="Install app"
+              onClick={handleInstallApp}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M12 3v12"></path>
+                <path d="M8 11l4 4 4-4"></path>
+                <path d="M4 21h16"></path>
+              </svg>
+            </button>
+          )}
+          <button
+            className="header-btn delete-chat-btn"
+            title="Delete current chat"
+            onClick={handleDeleteChat}
+            disabled={!currentChatId}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </button>
           <button className="header-btn" title="Share chat">
             <svg
               width="20"
@@ -231,24 +316,7 @@ const Chat = ({
         {messages.length === 0 ? (
           <div className="welcome-screen">
             <div className="welcome-icon">
-              <svg width="80" height="80" viewBox="0 0 41 41" fill="none">
-                <path
-                  d="M35.875 18.375C35.875 19.0625 35.3125 19.625 34.625 19.625H21.375C20.6875 19.625 20.125 19.0625 20.125 18.375V5.125C20.125 4.4375 20.6875 3.875 21.375 3.875H34.625C35.3125 3.875 35.875 4.4375 35.875 5.125V18.375Z"
-                  fill="var(--accent-color)"
-                />
-                <path
-                  d="M13.875 35.875C13.875 36.5625 13.3125 37.125 12.625 37.125H6.375C5.6875 37.125 5.125 36.5625 5.125 35.875V29.625C5.125 28.9375 5.6875 28.375 6.375 28.375H12.625C13.3125 28.375 13.875 28.9375 13.875 29.625V35.875Z"
-                  fill="var(--accent-color)"
-                />
-                <path
-                  d="M35.875 28.375H21.375C20.6875 28.375 20.125 28.9375 20.125 29.625V35.875C20.125 36.5625 20.6875 37.125 21.375 37.125H34.625C35.3125 37.125 35.875 36.5625 35.875 35.875V29.625C35.875 28.9375 35.3125 28.375 34.625 28.375H35.875Z"
-                  fill="var(--accent-color)"
-                />
-                <path
-                  d="M13.875 3.875H6.375C5.6875 3.875 5.125 4.4375 5.125 5.125V21.375C5.125 22.0625 5.6875 22.625 6.375 22.625H12.625C13.3125 22.625 13.875 22.0625 13.875 21.375V5.125C13.875 4.4375 13.3125 3.875 12.625 3.875H13.875Z"
-                  fill="var(--accent-color)"
-                />
-              </svg>
+              <img src={logo} alt="JARVIS" className="welcome-logo" />
             </div>
             <h2>How can I help you today?</h2>
             <div className="suggestions">
@@ -340,13 +408,15 @@ const Chat = ({
                   <div className="message-content">
                     <div className="message-header">
                       <span className="message-sender">
-                        {msg.sender === 'user' ? 'You' : 'ChatGPT'}
+                        {msg.sender === 'user' ? 'You' : 'JARVIS'}
                       </span>
                       <span className="message-time">
                         {formatTime(msg.timestamp)}
                       </span>
                     </div>
-                    <div className="message-text">{msg.text}</div>
+                    <div className="message-text">
+                      {normalizeText(msg.text)}
+                    </div>
                     {msg.sender === 'bot' && (
                       <div className="message-actions">
                         <button className="action-icon" title="Copy">
@@ -407,7 +477,7 @@ const Chat = ({
                   </div>
                   <div className="message-content">
                     <div className="message-header">
-                      <span className="message-sender">ChatGPT</span>
+                      <span className="message-sender">JARVIS</span>
                     </div>
                     <TypingIndicator />
                   </div>
@@ -425,9 +495,9 @@ const Chat = ({
           <textarea
             ref={textareaRef}
             value={input}
-            onChange={(e) => setInput(normalizeText(e))}
+            onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Message ChatGPT..."
+            placeholder="Message JARVIS..."
             rows="1"
             className="chat-input"
           />
@@ -441,7 +511,7 @@ const Chat = ({
           </button>
         </div>
         <p className="chat-disclaimer">
-          ChatGPT can make mistakes. Check important info.
+          JARVIS may make mistakes. Verify important information.
         </p>
       </div>
     </main>
