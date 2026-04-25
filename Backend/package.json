@@ -2,7 +2,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "npx nodemon server.js",
-    "kill": "taskkill /F /IM node.exe"
+    "kill": "taskkill /F /IM node.exe",
+    "postinstall": "cd ../Frontend && npm install && npm run build"
   },
   "dependencies": {
     "@google/genai": "^1.41.0",
