@@ -58,6 +58,7 @@ const Chat = ({
   const [isConnected, setIsConnected] = useState(false)
   const [installPromptEvent, setInstallPromptEvent] = useState(null)
   const [isInstalled, setIsInstalled] = useState(false)
+  const [installHelpType, setInstallHelpType] = useState('')
   const messagesEndRef = useRef(null)
   const textareaRef = useRef(null)
 
@@ -200,16 +201,7 @@ const Chat = ({
     }
 
     const isIOS = /iPad|iPhone|iPod/.test(window.navigator.userAgent)
-    if (isIOS) {
-      window.alert(
-        'To install on iPhone: tap Share icon and choose "Add to Home Screen".',
-      )
-      return
-    }
-
-    window.alert(
-      'Install option appears when browser allows PWA install. If hidden, open browser menu and choose Install app or Add to Home Screen.',
-    )
+    setInstallHelpType(isIOS ? 'ios' : 'android')
   }
 
   const handleDeleteChat = () => {
@@ -233,6 +225,49 @@ const Chat = ({
       hour: '2-digit',
       minute: '2-digit',
     })
+  }
+
+  const renderInstallHelp = () => {
+    if (!installHelpType) return null
+
+    const isIOSHelp = installHelpType === 'ios'
+    const title = isIOSHelp ? 'Install JARVIS on iPhone' : 'Install JARVIS App'
+    const steps = isIOSHelp
+      ? [
+          'Tap the Share button in Safari.',
+          'Scroll and select Add to Home Screen.',
+          'Tap Add to finish installation.',
+        ]
+      : [
+          'Open browser menu (three dots).',
+          'Tap Install app or Add to Home Screen.',
+          'Confirm installation to pin JARVIS on your device.',
+        ]
+
+    return (
+      <div
+        className="install-help-backdrop"
+        onClick={() => setInstallHelpType('')}
+      >
+        <div
+          className="install-help-modal"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h3>{title}</h3>
+          <ol>
+            {steps.map((step, index) => (
+              <li key={index}>{step}</li>
+            ))}
+          </ol>
+          <button
+            className="install-help-close"
+            onClick={() => setInstallHelpType('')}
+          >
+            Got it
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -527,6 +562,7 @@ const Chat = ({
           JARVIS may make mistakes. Verify important information.
         </p>
       </div>
+      {renderInstallHelp()}
     </main>
   )
 }

@@ -451,6 +451,56 @@
   margin-bottom: 0;
 }
 
+.install-help-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.58);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 120;
+  padding: 20px;
+}
+
+.install-help-modal {
+  width: min(420px, 100%);
+  background: var(--secondary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+.install-help-modal h3 {
+  margin: 0 0 12px;
+  color: var(--text-primary);
+  font-size: 18px;
+}
+
+.install-help-modal ol {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+.install-help-close {
+  margin-top: 16px;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: white;
+  background: var(--accent-color);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.install-help-close:hover {
+  background: var(--accent-hover);
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .chat-header {
