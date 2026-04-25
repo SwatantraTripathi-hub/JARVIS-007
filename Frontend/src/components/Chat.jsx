@@ -192,11 +192,24 @@ const Chat = ({
   }
 
   const handleInstallApp = async () => {
-    if (!installPromptEvent) return
+    if (installPromptEvent) {
+      installPromptEvent.prompt()
+      await installPromptEvent.userChoice
+      setInstallPromptEvent(null)
+      return
+    }
 
-    installPromptEvent.prompt()
-    await installPromptEvent.userChoice
-    setInstallPromptEvent(null)
+    const isIOS = /iPad|iPhone|iPod/.test(window.navigator.userAgent)
+    if (isIOS) {
+      window.alert(
+        'To install on iPhone: tap Share icon and choose "Add to Home Screen".',
+      )
+      return
+    }
+
+    window.alert(
+      'Install option appears when browser allows PWA install. If hidden, open browser menu and choose Install app or Add to Home Screen.',
+    )
   }
 
   const handleDeleteChat = () => {
@@ -254,7 +267,7 @@ const Chat = ({
           </span>
         </div>
         <div className="header-actions">
-          {!isInstalled && installPromptEvent && (
+          {!isInstalled && (
             <button
               className="header-btn install-btn"
               title="Install app"
