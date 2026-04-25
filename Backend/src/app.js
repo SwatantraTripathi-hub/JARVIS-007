@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const app = express();
 
-const frontendDistPath = path.resolve(__dirname, '../../Frontend/dist');
+const frontendDistPath = path.resolve(__dirname, '../../../Frontend/dist');
 const frontendIndexPath = path.join(frontendDistPath, 'index.html');
 const hasFrontendBuild = fs.existsSync(frontendIndexPath);
 
@@ -16,7 +16,7 @@ app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok' });
 });
 
-app.get('*', (_req, res) => {
+app.use((_req, res) => {
     if (hasFrontendBuild) {
         res.sendFile(frontendIndexPath);
         return;
