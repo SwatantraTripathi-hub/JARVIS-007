@@ -1,0 +1,9 @@
+services:
+  - type: static
+    name: jarvis-frontend
+    rootDir: Frontend/dist
+    buildCommand: 'cd Frontend && npm install && npm run build'
+    staticPublicPath: /
+    envVars:
+      - key: VITE_API_URL
+        value: https://jarvis-backend-onrender.com
