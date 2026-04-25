@@ -1,6 +1,29 @@
-<svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M35.875 18.375C35.875 19.0625 35.3125 19.625 34.625 19.625H21.375C20.6875 19.625 20.125 19.0625 20.125 18.375V5.125C20.125 4.4375 20.6875 3.875 21.375 3.875H34.625C35.3125 3.875 35.875 4.4375 35.875 5.125V18.375Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M13.875 35.875C13.875 36.5625 13.3125 37.125 12.625 37.125H6.375C5.6875 37.125 5.125 36.5625 5.125 35.875V29.625C5.125 28.9375 5.6875 28.375 6.375 28.375H12.625C13.3125 28.375 13.875 28.9375 13.875 29.625V35.875Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M35.875 28.375H21.375C20.6875 28.375 20.125 28.9375 20.125 29.625V35.875C20.125 36.5625 20.6875 37.125 21.375 37.125H34.625C35.3125 37.125 35.875 36.5625 35.875 35.875V29.625C35.875 28.9375 35.3125 28.375 34.625 28.375H35.875Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M13.875 3.875H6.375C5.6875 3.875 5.125 4.4375 5.125 5.125V21.375C5.125 22.0625 5.6875 22.625 6.375 22.625H12.625C13.3125 22.625 13.875 22.0625 13.875 21.375V5.125C13.875 4.4375 13.3125 3.875 12.625 3.875H13.875Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<linearGradient id="jarvisRing" x1="16" y1="16" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#57E3FF" />
+			<stop offset="1" stop-color="#00A5D8" />
+		</linearGradient>
+		<radialGradient id="jarvisCore" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(64 64) rotate(90) scale(48)">
+			<stop offset="0" stop-color="#37E6FF" stop-opacity="0.32" />
+			<stop offset="1" stop-color="#37E6FF" stop-opacity="0" />
+		</radialGradient>
+	</defs>
+
+	<circle cx="64" cy="64" r="62" stroke="url(#jarvisRing)" stroke-width="2" />
+	<circle cx="64" cy="64" r="52" stroke="url(#jarvisRing)" stroke-opacity="0.75" stroke-width="1.5" />
+	<circle cx="64" cy="64" r="40" stroke="url(#jarvisRing)" stroke-opacity="0.55" stroke-width="1.25" />
+	<circle cx="64" cy="64" r="24" fill="url(#jarvisCore)" stroke="url(#jarvisRing)" stroke-opacity="0.7" />
+
+	<path d="M64 16V112M16 64H112" stroke="url(#jarvisRing)" stroke-opacity="0.35" stroke-width="1" />
+	<path d="M31 44L64 26L97 44V84L64 102L31 84V44Z" stroke="url(#jarvisRing)" stroke-opacity="0.55" stroke-width="1.5" />
+
+	<circle cx="64" cy="26" r="2.6" fill="#58EAFF" />
+	<circle cx="97" cy="44" r="2.6" fill="#58EAFF" />
+	<circle cx="97" cy="84" r="2.6" fill="#58EAFF" />
+	<circle cx="64" cy="102" r="2.6" fill="#58EAFF" />
+	<circle cx="31" cy="84" r="2.6" fill="#58EAFF" />
+	<circle cx="31" cy="44" r="2.6" fill="#58EAFF" />
+
+	<path d="M58 50H71C74.3137 50 77 52.6863 77 56V60C77 63.3137 74.3137 66 71 66H62V77H56V56C56 52.6863 58.6863 50 62 50H64" stroke="#70ECFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
 </svg>

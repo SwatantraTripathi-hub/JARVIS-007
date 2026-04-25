@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen, onToggle, onNewChat, chatHistory, currentChat, onSele
         <div className="sidebar-header">
           <div className="sidebar-logo">
             <img src={logo} alt="logo" className="logo-icon" />
-            <span className="logo-text">ChatGPT</span>
+            <span className="logo-text">JARVIS</span>
           </div>
           <button className="new-chat-btn" onClick={onNewChat}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
