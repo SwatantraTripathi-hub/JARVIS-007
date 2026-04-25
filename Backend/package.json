@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "start": "node server.js",
+    "dev": "npx nodemon server.js",
+    "kill": "taskkill /F /IM node.exe"
+  },
+  "dependencies": {
+    "@google/genai": "^1.41.0",
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11",
+    "socket.io": "^4.8.3"
+  }
+}
