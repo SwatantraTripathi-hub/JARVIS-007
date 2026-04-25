@@ -2,10 +2,11 @@ require('dotenv').config();
 const app = require('./src/app');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
-const { execSync } = require('child_process');
+const connectDB = require('./src/db/db');
 const generate_text = require('./src/Service/ai.service');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
+const HOST = '0.0.0.0';
 
 /** @param {unknown} value */
 const normalizeText = (value) => {
@@ -36,23 +37,6 @@ const normalizeText = (value) => {
 
   return '';
 };
-
-// ---- Auto-kill any process already using PORT (Windows) ----
-try {
-  const out = execSync(
-    `netstat -ano | findstr :${PORT} | findstr LISTENING`,
-    { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }
-  );
-  const pids = [...new Set(
-    out.trim().split('\n').map(l => l.trim().split(/\s+/).pop())
-  )];
-  pids.forEach(pid => {
-    try { execSync(`taskkill /F /PID ${pid}`, { stdio: 'ignore' }); } catch (_) {}
-  });
-  console.log(`Freed port ${PORT} (killed PIDs: ${pids.join(', ')})`);
-} catch (_) {
-  // No process on the port — good
-}
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -111,6 +95,23 @@ io.on('connection', (socket) => {
   });
 });
 
-httpServer.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+async function startServer() {
+  try {
+    await connectDB();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('MongoDB connection error:', message);
+  }
+
+  httpServer.listen(PORT, HOST, () => {
+    console.log(`Server is running on ${HOST}:${PORT}`);
+  });
+
+  httpServer.on('error', (error) => {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('HTTP server failed to bind:', message);
+    process.exit(1);
+  });
+}
+
+startServer();
