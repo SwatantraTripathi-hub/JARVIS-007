@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const app = express();
 
-const frontendDistPath = path.resolve(__dirname, '../../../Frontend/dist');
+const frontendDistPath = path.resolve(__dirname, '../../Frontend/dist');
 const frontendIndexPath = path.join(frontendDistPath, 'index.html');
 const hasFrontendBuild = fs.existsSync(frontendIndexPath);
 
